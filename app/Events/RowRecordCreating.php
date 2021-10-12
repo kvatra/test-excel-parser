@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Events;
 
 use App\Models\Row;
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class RowRecordCreating
+class RowRecordCreating implements ShouldBroadcast
 {
     private Row $model;
     private string $fileId;
@@ -25,5 +27,15 @@ class RowRecordCreating
     public function getFileId(): string
     {
         return $this->fileId;
+    }
+
+    public function broadcastOn()
+    {
+        return new Channel('App.Models.Row.public');
+    }
+
+    public function broadcastWith(): array
+    {
+        return $this->model->toArray();
     }
 }

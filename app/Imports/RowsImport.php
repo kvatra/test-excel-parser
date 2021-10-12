@@ -39,7 +39,6 @@ class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedF
             'date' => Carbon::createFromTimestamp($date),
         ]);
 
-        logger('row', [$row, $model]);
         event(new RowRecordCreating($model, $this->uniqueFileId));
 
         return $model;

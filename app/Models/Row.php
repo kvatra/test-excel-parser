@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -14,6 +15,8 @@ use Illuminate\Support\Carbon;
  */
 class Row extends Model
 {
+    use HasFactory;
+
     public $incrementing = false;
     public $timestamps = false;
 

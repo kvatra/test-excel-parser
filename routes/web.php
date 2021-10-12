@@ -19,3 +19,6 @@ Route::get('/', function () {
 
 Route::post('/', [RowController::class, 'uploadXmlFile'])
     ->name('upload-xml');
+
+Route::get('/row', [RowController::class, 'fetchRows'])
+    ->name('row-list');

@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Events\AfterImport;
+use PhpOffice\PhpSpreadsheet\Shared\Date as PhpOfficeDate;
 
 class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedFormulas, WithChunkReading, WithUpserts, ShouldQueue
 {
@@ -30,12 +31,15 @@ class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedF
 
     public function model(array $row)
     {
+        $date = PhpOfficeDate::excelToTimestamp($row['date']);
+
         $model = new Row([
             'id' => $row['id'],
             'name' => $row['name'],
-            'date' => Carbon::parse($row['date'])
+            'date' => Carbon::createFromTimestamp($date),
         ]);
 
+        logger('row', [$row, $model]);
         event(new RowRecordCreating($model, $this->uniqueFileId));
 
         return $model;

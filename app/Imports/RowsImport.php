@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Events\RowRecordCreating;
+use App\Events\RowRecordCreated;
 use App\Models\Row;
 use App\Services\ParsedFileRowsCountStorage;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,11 +14,10 @@ use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Events\AfterImport;
 use PhpOffice\PhpSpreadsheet\Shared\Date as PhpOfficeDate;
 
-class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedFormulas, WithChunkReading, WithUpserts, ShouldQueue
+class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedFormulas, WithChunkReading, ShouldQueue
 {
     use RegistersEventListeners;
 
@@ -33,15 +32,12 @@ class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedF
     {
         $date = PhpOfficeDate::excelToTimestamp($row['date']);
 
-        $model = new Row([
+        return new Row([
             'id' => $row['id'],
+            'file_id' => $this->uniqueFileId,
             'name' => $row['name'],
             'date' => Carbon::createFromTimestamp($date),
         ]);
-
-        event(new RowRecordCreating($model, $this->uniqueFileId));
-
-        return $model;
     }
 
     public static function afterImport(AfterImport $event)
@@ -59,18 +55,8 @@ class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedF
         return $this->uniqueFileId;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
     public function chunkSize(): int
     {
-        return 10000;
-    }
-
-    public function uniqueBy()
-    {
-        return 'id';
+        return 1000;
     }
 }

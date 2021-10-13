@@ -3,8 +3,8 @@
         <script src="{{ mix('/js/app.js') }}"></script>
         <script>
             Echo.channel('App.Models.Row.public')
-                .listen('RowRecordCreating', (e) => {
-                  console.log('record creating', e)
+                .listen('RowRecordCreated', (e) => {
+                  console.log('record created', e)
                 })
         </script>
     </head>

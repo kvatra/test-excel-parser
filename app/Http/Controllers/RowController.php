@@ -17,7 +17,7 @@ class RowController extends Controller
     {
         /** @var UploadedFile $file */
         $file = $request->validated()['xml'];
-        Excel::import(new RowsImport($file->getPath()), $file);
+        Excel::queueImport(new RowsImport($file->getFilename()), $file);
 
         return response()->json('Success!');
     }

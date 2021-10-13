@@ -9,9 +9,12 @@ class CreateRowsTable extends Migration
     public function up()
     {
         Schema::create('rows', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
+            $table->unsignedBigInteger('id');
             $table->string('name');
             $table->date('date');
+            $table->string('file_id');
+
+            $table->unique(['id', 'file_id']);
         });
     }
 

@@ -7,7 +7,6 @@ namespace App\Listeners;
 use App\Events\RowRecordCreated;
 use App\Services\ParsedFileRowsCountStorage;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\App;
 
 class IncrementParsedFileRowsCount implements ShouldQueue
 {

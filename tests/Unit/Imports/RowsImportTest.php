@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Imports;
 
-use App\Events\RowRecordCreated;
 use App\Imports\RowsImport;
-use App\Models\Row;
 use App\Services\ParsedFileRowsCountStorage;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Event;
 use Maatwebsite\Excel\Events\AfterImport;
 use PhpOffice\PhpSpreadsheet\Shared\Date as PhpOfficeDate;
 use Tests\TestCase;

@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Imports;
 
-use App\Events\RowRecordCreated;
 use App\Models\Row;
 use App\Services\ParsedFileRowsCountStorage;
 use Illuminate\Contracts\Queue\ShouldQueue;

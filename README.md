@@ -19,7 +19,7 @@
 ## Deployment
 1. настроить env
 ```
-    cp .env.example .env
+cp .env.example .env
 ```
 Для broadcast'a используется pusher, нужно его креды прописать также в .env (https://dashboard.pusher.com/)
 ```

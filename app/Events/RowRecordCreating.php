@@ -8,7 +8,7 @@ use App\Models\Row;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class RowRecordCreated implements ShouldBroadcast
+class RowRecordCreating implements ShouldBroadcast
 {
     private Row $model;
     private string $fileId;

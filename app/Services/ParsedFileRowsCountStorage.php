@@ -17,9 +17,9 @@ class ParsedFileRowsCountStorage
         $this->redis = $redis;
     }
 
-    public function increment(string $fileId, int $count): void
+    public function increment(string $fileId): void
     {
-        $this->redis->incrBy($this->generateKey($fileId), $count);
+        $this->redis->incr($this->generateKey($fileId));
     }
 
     public function removeFileState(string $fileId): void

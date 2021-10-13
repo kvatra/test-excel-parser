@@ -31,6 +31,7 @@ PUSHER_APP_CLUSTER=
 2. composer
 
 ```composer install```
+
 3. npm
 
 ```

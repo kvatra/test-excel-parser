@@ -19,7 +19,7 @@ class RowController extends Controller
         $file = $request->validated()['xml'];
         Excel::queueImport(new RowsImport($file->getFilename()), $file);
 
-        return response()->json('Success!');
+        return view('success_upload_xml', ['file_id' => $file->getFilename()]);
     }
 
     public function fetchRows()

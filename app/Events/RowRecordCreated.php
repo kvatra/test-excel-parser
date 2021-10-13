@@ -24,7 +24,7 @@ class RowRecordCreated implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('App.Models.Row.public');
+        return new Channel('App.Models.Row.public.' . $this->model->file_id);
     }
 
     public function broadcastWith(): array

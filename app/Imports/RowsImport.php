@@ -7,16 +7,16 @@ use App\Services\ParsedFileRowsCountStorage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Events\AfterImport;
 use PhpOffice\PhpSpreadsheet\Shared\Date as PhpOfficeDate;
 
-class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedFormulas, WithChunkReading, ShouldQueue
+class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithChunkReading, ShouldQueue
 {
     use RegistersEventListeners;
 
@@ -29,10 +29,11 @@ class RowsImport implements ToModel, WithEvents, WithHeadingRow, WithCalculatedF
 
     public function model(array $row)
     {
+        $id = is_float($row['id']) ? 1 : (int) Str::between($row['id'], '=A', '+1');
         $date = PhpOfficeDate::excelToTimestamp($row['date']);
 
         return new Row([
-            'id' => $row['id'],
+            'id' => $id,
             'file_id' => $this->uniqueFileId,
             'name' => $row['name'],
             'date' => Carbon::createFromTimestamp($date),

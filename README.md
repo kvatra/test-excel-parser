@@ -1,64 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Задание
+1. Развернуть laravel в docker с установкой laravel cron и сервером очередей rabbitmq
+2. Реализовать контроллер с валидацией и загрузкой excel файла
+3. Загруженный файл через jobs поэтапно (по 1000 строк) парсить в бд (таблица rows)
+4. Прогресс парсинга файла хранить в redis (уникальный ключ + количество обработанных строк)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Поля excel:
+- id
+- name
+- date (d.m.Y)
 
-## About Laravel
+Для парсинга excel можете использовать maatwebsite/excel  
+Пример файла: https://yadi.sk/i/YuwPGwcIzv1DBQ
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+5. Реализовать контроллер для вывода данных (rows) с группировкой по date - двумерный массив
+6. Будет плюсом если вы реализуете через laravel echo передачу event-а на создание записи в rows
+7. Написать тесты
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Deployment
+1. настроить env
+```
+    cp .env.example .env
+```
+Для broadcast'a используется pusher, нужно его креды прописать также в .env (https://dashboard.pusher.com/)
+```
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. composer
 
-## Learning Laravel
+```composer install```
+3. npm
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+npm install
+npm run prod
+``` 
+4. docker-compose
+```
+docker-compose build
+docker-compose up -d
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Приложение будет работать на 8080 порту. 
 
-## Laravel Sponsors
+### Routes:
+`/` - форма для загрузки xml файла
+После успешной обработки файла пользователю рисуется страница `Success` ъ
+и в консоль будут идти сообщения из ws по созданию каждой записи (из задания)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+`/row` - контроллер для вывода записей в виде двумерного массива (из задания)
+`/horizon` - поднять horizon для работы с очередью
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Сопроводительная
+В целом все из задания сделано, но есть пара оговорок: 
+1. не совсем понял для чего изначально в задании упоминался rabbitmq в docker. Не стал его поднимать.
+Но вряд ли это сложно с учетом всего остального поднятого.  
+2. Есть места для оптимизации явной - это вставка каждой записи по одной переделать на вставку бачами (через либу, например).
+Сделано иначе по причине, что в задании сказано слать в ws каждое событие и по одному вставлять было проще. 

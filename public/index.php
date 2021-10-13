@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;

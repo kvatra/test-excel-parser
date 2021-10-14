@@ -1,6 +1,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head title="XML">
-    <script src="{{ mix('/js/app.js') }}"></script>
+    <script src="/js/app.js"></script>
     <script>
       Echo.channel('App.Models.Row.public.' + '{{ $file_id }}')
         .listen('RowRecordCreated', (e) => {

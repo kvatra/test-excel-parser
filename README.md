@@ -21,32 +21,20 @@
 ```
 cp .env.example .env
 ```
-Для broadcast'a используется pusher, нужно его креды прописать также в .env (https://dashboard.pusher.com/)
+Также для broadcast'a ивентоа используется pusher. Для его настройки нужно получить и прописать в .env API Key (https://dashboard.pusher.com/)
 ```
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 PUSHER_APP_CLUSTER=
 ```
 
-2. composer
-
-```
-composer install
-```
-
-3. npm
-
-```
-npm install
-npm run prod
-``` 
-4. docker-compose
+2. Сбилдить и поднять docker-compose. Все зависимости проекта будут также собраны во время сборки Docker образа.
 ```
 docker-compose build
 docker-compose up -d
 ```
 
-Приложение будет работать на 8080 порту. 
+Приложение открыть на 8080 порту. 
 
 ### Routes:
 `/` - форма для загрузки xml файла

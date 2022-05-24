@@ -21,7 +21,7 @@
 ```
 cp .env.example .env
 ```
-Также для broadcast'a ивентоа используется pusher. Для его настройки нужно получить и прописать в .env API Key (https://dashboard.pusher.com/)
+Также для broadcast'a ивентов используется pusher. Для его настройки нужно получить и прописать в .env API Key (https://dashboard.pusher.com/)
 ```
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
